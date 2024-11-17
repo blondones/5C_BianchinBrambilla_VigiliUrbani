@@ -1,3 +1,5 @@
+import { createForm } from "./form.js";
+
 const map = L.map('map').setView([45.4642, 9.19], 13);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -5,7 +7,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 function addMarkerByAddress(address) {
-    fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + (address))
+    fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(address))
         .then(response => response.json())
         .then(data => {
             if (data && data.length > 0) {
@@ -21,5 +23,18 @@ function addMarkerByAddress(address) {
         .catch(error => {
             console.error('Errore nel geocoding:', error);
             alert('Errore nel geocoding');
-        });
+        });
 }
+
+function updateMap() {
+    const formContainer = document.getElementById("modaleDiv");
+    const form = createForm(formContainer);
+
+    form.onsubmit((incidente) => {
+        addMarkerByAddress(incidente.indirizzo);
+    });
+
+    form.render();
+}
+
+updateMap();

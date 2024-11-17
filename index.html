@@ -1,27 +1,36 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="./style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css" />
-    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css" />
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Vigili Urbani</title>
-
   </head>
   <body>
 
     <h1>Vigili Urbani</h1>
 
-    <div id = "buttonsDiv"></div>
-    <div id = "tableDiv"></div>
-    <div id = "modaleDiv"></div>
-    
-    <script type="module"  src = "cache.js"></script>
-    <script type="module" src= "maps.js"></script>
-    <script type="module" src = "form.js"></script>
+    <div id="buttonsDiv"></div>
+    <div id="tableDiv"></div>
+    <div id="modaleDiv"></div>
 
-</body>
+
+    <div id="map" style="height: 500px;"></div>
+
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+  
+    <script type="module" src="form.js"></script>
+    <script type="module" src="maps.js"></script>
+
+  </body>
 </html>
