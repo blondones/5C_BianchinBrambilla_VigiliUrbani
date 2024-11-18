@@ -6,95 +6,106 @@ export const createForm = (parentElement) => {
 
         render: () => {
             parentElement.innerHTML = `
-            <form id="moduloIncidente" class="container">
-                <div class="row">
-                    <label for="inputVia">Via</label>
-                    <input type="text" id="inputVia" class="form-control" required />
+            <div class="ap">
+                <button type="button" class="button btn btn-primary" data-bs-toggle="modal" data-bs-target="#incidentModal">
+                  Segnala Incidente
+                </button>
+            </div>
+            <div class="modal fade" id="incidentModal" tabindex="-1" aria-labelledby="incidentModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="incidentModalLabel">Nuovo Incidente</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="incidentForm">
+                                <div class="mb-3">
+                                    <label for="inputVia" class="form-label">Via</label>
+                                    <input type="text" id="inputVia" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="dataOra" class="form-label">Data e Ora</label>
+                                    <input type="datetime-local" id="dataOra" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="targa1" class="form-label">Targa 1</label>
+                                    <input type="text" id="targa1" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="targa2" class="form-label">Targa 2</label>
+                                    <input type="text" id="targa2" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="targa3" class="form-label">Targa 3</label>
+                                    <input type="text" id="targa3" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="inputMorti" class="form-label">Morti</label>
+                                    <input type="number" id="inputMorti" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="inputFeriti" class="form-label">Feriti</label>
+                                    <input type="number" id="inputFeriti" class="form-control">
+                                </div>
+                            </form>
+                            <div id="message" class="mt-3 text-danger d-none"> <!-- Messaggio di errore -->
+                                Compila tutti i campi obbligatori!
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" id="cancel" data-bs-dismiss="modal">Annulla</button>
+                            <button type="button" class="btn btn-success" id="submit">Invia</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="row">
-                    <label for="dataOra">Data e Ora</label>
-                    <input type="datetime-local" id="dataOra" class="form-control" required />
-                </div>
-                <div class="row">
-                    <label for="targa1">Targa 1</label>
-                    <input type="text" id="targa1" class="form-control" />
-                </div>
-                <div class="row">
-                    <label for="targa2">Targa 2</label>
-                    <input type="text" id="targa2" class="form-control" />
-                </div>
-                <div class="row">
-                    <label for="targa3">Targa 3</label>
-                    <input type="text" id="targa3" class="form-control" />
-                </div>
-                <div class="row">
-                    <label for="inputMorti">Morti</label>
-                    <input type="number" id="inputMorti" class="form-control" />
-                </div>
-                <div class="row">
-                    <label for="inputFeriti">Feriti</label>
-                    <input type="number" id="inputFeriti" class="form-control" />
-                </div>
-                <div class="row">
-                    <button type="button" id="submit" class="btn btn-success">Invia</button>
-                    <button type="button" id="clearButton" class="btn btn-danger">Pulisci</button>
-                </div>
-                <div class="row">
-                    <label id="resultLabel" class="text-danger"></label>
-                </div>
-            </form>
+            </div>
             `;
 
-            const clearForm = () => {
-                document.getElementById("inputVia").value = "";
-                document.getElementById("dataOra").value = "";
-                document.getElementById("targa1").value = "";
-                document.getElementById("targa2").value = "";
-                document.getElementById("targa3").value = "";
-                document.getElementById("inputMorti").value = "";
-                document.getElementById("inputFeriti").value = "";
-                document.getElementById("resultLabel").innerText = "";
-            };
+            const messageElement = document.querySelector("#message");
 
-            document.getElementById("submit").onclick = () => {
+            document.querySelector("#submit").onclick = () => {
                 const targhe = [];
-                const targa1 = document.getElementById("targa1").value;
-                const targa2 = document.getElementById("targa2").value;
-                const targa3 = document.getElementById("targa3").value;
+                const targa1 = document.querySelector("#targa1").value;
+                const targa2 = document.querySelector("#targa2").value;
+                const targa3 = document.querySelector("#targa3").value;
 
                 if (targa1) targhe.push(targa1);
                 if (targa2) targhe.push(targa2);
                 if (targa3) targhe.push(targa3);
 
                 const incidente = {
-                    indirizzo: document.getElementById("inputVia").value + ", Milano",
-                    dataOra: document.getElementById("dataOra").value,
+                    indirizzo: document.querySelector("#inputVia").value + ", Milano",
+                    dataOra: document.querySelector("#dataOra").value,
                     targhe: targhe,
-                    morti: parseInt(document.getElementById("inputMorti").value || "0", 10),
-                    feriti: parseInt(document.getElementById("inputFeriti").value || "0", 10),
+                    morti: parseInt(document.querySelector("#inputMorti").value || "0", 10),
+                    feriti: parseInt(document.querySelector("#inputFeriti").value || "0", 10),
                 };
 
-                if (callback) {
-                    callback(incidente);
+                if (!incidente.indirizzo || !incidente.dataOra) {
+                    messageElement.classList.remove("d-none");
+                } else {
+                    messageElement.classList.add("d-none");
+
+                    if (callback) {
+                        callback(incidente);
+                    }
+                    document.querySelector("#incidentForm").reset();
+                    document.getElementById("cancel").click();
                 }
             };
 
-            document.getElementById("clearButton").onclick = clearForm;
+            document.querySelector("#cancel").onclick = () => {
+                document.querySelector("#incidentForm").reset();
+                messageElement.classList.add("d-none");
+            };
         },
-
-        clear: () => {
-            document.getElementById("inputVia").value = "";
-            document.getElementById("dataOra").value = "";
-            document.getElementById("targa1").value = "";
-            document.getElementById("targa2").value = "";
-            document.getElementById("targa3").value = "";
-            document.getElementById("inputMorti").value = "";
-            document.getElementById("inputFeriti").value = "";
-            document.getElementById("resultLabel").innerText = "";
-        },
-
-        setError: (error) => {
-            document.getElementById("resultLabel").innerText = error;
-        }
     };
 };
+
+const form = createForm(document.querySelector("#modalDiv"));
+form.onsubmit((incidente) => {
+    console.log("Incidente salvato:", incidente);
+    alert("Incidente registrato con successo!");
+});
+form.render();
