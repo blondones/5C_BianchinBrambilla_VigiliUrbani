@@ -96,7 +96,7 @@ function clearTable() {
 }
 
 function updateMap() {
-    const formContainer = document.getElementById("modaleDiv");
+    const formContainer = document.getElementById("modalDiv");
     const mapContainer = document.getElementById("map");
     const form = createForm(formContainer);
     const map = createMap(mapContainer);
