@@ -1,6 +1,6 @@
 import { createForm } from "./form.js";
 
-const createMap = (parentElement) => {
+export const createMap = (parentElement) => {
     let map, markers = [];
 
     return {
@@ -51,7 +51,7 @@ const createMap = (parentElement) => {
     };
 };
 
-function addToTable(incidente) {
+export function addToTable(incidente) {
     const tableDiv = document.getElementById("tableDiv");
 
     if (!tableDiv.querySelector("table")) {
@@ -80,9 +80,7 @@ function addToTable(incidente) {
         '<tr>' +
             '<td>' + incidente.indirizzo + '</td>' +
             '<td>' + incidente.dataOra + '</td>' +
-            '<td>' + (incidente.targhe[0] || "") + '</td>' +
-            '<td>' + (incidente.targhe[1] || "") + '</td>' +
-            '<td>' + (incidente.targhe[2] || "") + '</td>' +
+            '<td>' + (incidente.targhe) + '</td>' +
             '<td>' + incidente.morti + '</td>' +
             '<td>' + incidente.feriti + '</td>' +
         '</tr>';
@@ -94,20 +92,3 @@ function clearTable() {
     const tableBody = document.getElementById("tableBody");
     tableBody.innerHTML = "";
 }
-
-function updateMap() {
-    const formContainer = document.getElementById("modalDiv");
-    const mapContainer = document.getElementById("map");
-    const form = createForm(formContainer);
-    const map = createMap(mapContainer);
-
-    map.build();
-
-    form.onsubmit((incidente) => {
-        map.addMarkerByAddress(incidente);
-    });
-
-    form.render();
-}
-
-updateMap();

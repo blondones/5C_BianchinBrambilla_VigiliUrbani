@@ -1,3 +1,7 @@
+import { generateFetchComponent } from "./fetch.js";
+import { addToTable } from "./maps.js";
+import { createMap } from "./maps.js";
+
 export const createForm = (parentElement) => {
     let callback = null;
 
@@ -30,15 +34,7 @@ export const createForm = (parentElement) => {
                                 </div>
                                 <div class="mb-3">
                                     <label for="targa1" class="form-label">Targa 1</label>
-                                    <input type="text" id="targa1" class="form-control">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="targa2" class="form-label">Targa 2</label>
-                                    <input type="text" id="targa2" class="form-control">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="targa3" class="form-label">Targa 3</label>
-                                    <input type="text" id="targa3" class="form-control">
+                                    <input type="text" id="targa" class="form-control">
                                 </div>
                                 <div class="mb-3">
                                     <label for="inputMorti" class="form-label">Morti</label>
@@ -65,21 +61,15 @@ export const createForm = (parentElement) => {
             const messageElement = document.querySelector("#message");
 
             document.querySelector("#submit").onclick = () => {
-                const targhe = [];
-                const targa1 = document.querySelector("#targa1").value;
-                const targa2 = document.querySelector("#targa2").value;
-                const targa3 = document.querySelector("#targa3").value;
-
-                if (targa1) targhe.push(targa1);
-                if (targa2) targhe.push(targa2);
-                if (targa3) targhe.push(targa3);
+                const targa = document.querySelector("#targa").value;
 
                 const incidente = {
                     indirizzo: document.querySelector("#inputVia").value + ", Milano",
                     dataOra: document.querySelector("#dataOra").value,
-                    targhe: targhe,
+                    targhe: targa,
                     morti: parseInt(document.querySelector("#inputMorti").value || "0", 10),
                     feriti: parseInt(document.querySelector("#inputFeriti").value || "0", 10),
+                    key: document.querySelector("#inputVia").value + ", Milano" + document.querySelector("#dataOra").value
                 };
 
                 if (!incidente.indirizzo || !incidente.dataOra) {
@@ -103,9 +93,34 @@ export const createForm = (parentElement) => {
     };
 };
 
+const fetch = generateFetchComponent();
+fetch.getData().then((s) => {
+    let lastResult = s;
+    console.log(lastResult);
+    for(const key in lastResult) {
+        addToTable(lastResult[key]);
+    }
+}).catch(console.error)
 const form = createForm(document.querySelector("#modalDiv"));
+const mapContainer = document.getElementById("map");
+const map = createMap(mapContainer);
+console.log(map)
+map.build();
 form.onsubmit((incidente) => {
+    map.addMarkerByAddress(incidente);
+    fetch.setData().then((r) => {
+        let result = JSON.parse(r);
+        if(!result[incidente[incidente[key]]]) incidente[key] = incidente;
+        else console.log("presente")
+        fetch.setData(incidente).then(() => {
+            fetch.getData().then((s) => {
+                let lastResult = JSON.parse(s);
+                for(const key in lastResult) {
+                    addToTable(lastResult[key]);
+                };
+            }).catch(console.error)
+        }).catch(console.error)
+    }).catch(console.error)
     console.log("Incidente salvato:", incidente);
-    alert("Incidente registrato con successo!");
 });
 form.render();

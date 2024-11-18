@@ -1,3 +1,4 @@
+import { cacheToken, cacheKey } from "./conf.js";
 export function generateFetchComponent() {
     return {
         setData: (data) => {
@@ -9,12 +10,12 @@ export function generateFetchComponent() {
                             "key": cacheToken
                         },
                         body: JSON.stringify({
-                            key: CHIAVEFETCHCOMP,
+                            key: cacheKey,
                             value: JSON.stringify(data)
                         })
                     })
                     .then(r => r.json())
-                    .then(data => resolve(data.result))
+                    .then(data => {resolve(data.result)})
                     .catch(err => reject(err.result));
             });
         },
@@ -27,11 +28,11 @@ export function generateFetchComponent() {
                             "key": cacheToken
                         },
                         body: JSON.stringify({
-                            key: CHIAVEFETCHCOMP
+                            key: cacheKey
                         })
                     })
                     .then(r => r.json())
-                    .then(data => resolve(data.result))
+                    .then(data => resolve(data))
                     .catch(err => reject(err.result));
             })
         }
