@@ -14,7 +14,7 @@ const createMap = (parentElement) => {
         addMarkerByAddress: (incidente) => {
             const address = incidente.indirizzo;
 
-            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
+            fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(address))
                 .then(response => response.json())
                 .then(data => {
                     if (data && data.length > 0) {
@@ -32,6 +32,8 @@ const createMap = (parentElement) => {
                         marker.bindPopup(popupContent).openPopup();
                         map.setView([lat, lon], 13);
                         markers.push(marker);
+
+                        addToTable(incidente);
                     } else {
                         console.error("Indirizzo non trovato: " + address);
                     }
@@ -44,9 +46,54 @@ const createMap = (parentElement) => {
         clearMarkers: () => {
             markers.forEach(marker => map.removeLayer(marker));
             markers = [];
+            clearTable();
         }
     };
 };
+
+function addToTable(incidente) {
+    const tableDiv = document.getElementById("tableDiv");
+
+    if (!tableDiv.querySelector("table")) {
+        const tableHTML = 
+            '<table class="table table-striped">' +
+                '<thead>' +
+                    '<tr>' +
+                        '<th>Indirizzo</th>' +
+                        '<th>Data e Ora</th>' +
+                        '<th>Targa 1</th>' +
+                        '<th>Targa 2</th>' +
+                        '<th>Targa 3</th>' +
+                        '<th>Morti</th>' +
+                        '<th>Feriti</th>' +
+                    '</tr>' +
+                '</thead>' +
+                '<tbody id="tableBody">' +
+                '</tbody>' +
+            '</table>';
+        tableDiv.innerHTML = tableHTML;
+    }
+
+    const tableBody = document.getElementById("tableBody");
+
+    const rowHTML = 
+        '<tr>' +
+            '<td>' + incidente.indirizzo + '</td>' +
+            '<td>' + incidente.dataOra + '</td>' +
+            '<td>' + (incidente.targhe[0] || "") + '</td>' +
+            '<td>' + (incidente.targhe[1] || "") + '</td>' +
+            '<td>' + (incidente.targhe[2] || "") + '</td>' +
+            '<td>' + incidente.morti + '</td>' +
+            '<td>' + incidente.feriti + '</td>' +
+        '</tr>';
+
+    tableBody.innerHTML += rowHTML;
+}
+
+function clearTable() {
+    const tableBody = document.getElementById("tableBody");
+    tableBody.innerHTML = "";
+}
 
 function updateMap() {
     const formContainer = document.getElementById("modaleDiv");
