@@ -34,12 +34,10 @@ const createMap = (parentElement) => {
                         markers.push(marker);
                     } else {
                         console.error("Indirizzo non trovato: " + address);
-                        alert("Indirizzo non valido o non trovato!");
                     }
                 })
                 .catch(error => {
                     console.error("Errore nel geocoding:", error);
-                    alert("Errore durante la ricerca dell'indirizzo. Riprova più tardi.");
                 });
         },
 
