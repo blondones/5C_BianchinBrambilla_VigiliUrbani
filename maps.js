@@ -1,6 +1,6 @@
 import { createForm } from "./form.js";
 
-const createMap = (parentElement) => {
+export const createMap = (parentElement) => {
     let map, markers = [];
 
     return {
@@ -25,7 +25,7 @@ const createMap = (parentElement) => {
 
                         const popupContent = "<b>Indirizzo:</b> " + incidente.indirizzo + "<br>" +
                             "<b>Data e Ora:</b> " + incidente.dataOra + "<br>" +
-                            "<b>Targhe:</b> " + (incidente.targhe.length > 0 ? incidente.targhe.join("; ") : "Nessuna") + "<br>" +
+                            "<b>Targhe:</b> " + (incidente.targhe.length > 0 ? incidente.targhe : "Nessuna") + "<br>" +
                             "<b>Morti:</b> " + incidente.morti + "<br>" +
                             "<b>Feriti:</b> " + incidente.feriti;
 
@@ -51,7 +51,7 @@ const createMap = (parentElement) => {
     };
 };
 
-function addToTable(incidente) {
+export function addToTable(incidente) {
     const tableDiv = document.getElementById("tableDiv");
 
     if (!tableDiv.querySelector("table")) {
@@ -61,9 +61,7 @@ function addToTable(incidente) {
                     '<tr>' +
                         '<th>Indirizzo</th>' +
                         '<th>Data e Ora</th>' +
-                        '<th>Targa 1</th>' +
-                        '<th>Targa 2</th>' +
-                        '<th>Targa 3</th>' +
+                        '<th>Targhe</th>' +
                         '<th>Morti</th>' +
                         '<th>Feriti</th>' +
                     '</tr>' +
@@ -75,39 +73,21 @@ function addToTable(incidente) {
     }
 
     const tableBody = document.getElementById("tableBody");
-
-    const rowHTML = 
+    let rowHTML="";
+    for(const key in incidente){
+     rowHTML += 
         '<tr>' +
-            '<td>' + incidente.indirizzo + '</td>' +
-            '<td>' + incidente.dataOra + '</td>' +
-            '<td>' + (incidente.targhe[0] || "") + '</td>' +
-            '<td>' + (incidente.targhe[1] || "") + '</td>' +
-            '<td>' + (incidente.targhe[2] || "") + '</td>' +
-            '<td>' + incidente.morti + '</td>' +
-            '<td>' + incidente.feriti + '</td>' +
+            '<td>' + incidente[key].indirizzo + '</td>' +
+            '<td>' + incidente[key].dataOra + '</td>' +
+            '<td>' + (incidente[key].targhe) + '</td>' +
+            '<td>' + incidente[key].morti + '</td>' +
+            '<td>' + incidente[key].feriti + '</td>' +
         '</tr>';
-
-    tableBody.innerHTML += rowHTML;
+    }
+    tableBody.innerHTML = rowHTML;
 }
 
 function clearTable() {
     const tableBody = document.getElementById("tableBody");
     tableBody.innerHTML = "";
 }
-
-function updateMap() {
-    const formContainer = document.getElementById("modaleDiv");
-    const mapContainer = document.getElementById("map");
-    const form = createForm(formContainer);
-    const map = createMap(mapContainer);
-
-    map.build();
-
-    form.onsubmit((incidente) => {
-        map.addMarkerByAddress(incidente);
-    });
-
-    form.render();
-}
-
-updateMap();
