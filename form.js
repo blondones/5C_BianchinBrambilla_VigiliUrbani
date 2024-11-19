@@ -2,6 +2,16 @@ import { generateFetchComponent } from "./fetch.js";
 import { addToTable } from "./maps.js";
 import { createMap } from "./maps.js";
 
+function eliminaspazi(stringa) {
+    let stringaResult = "";
+    for (let i = 0; i < stringa.length; i++) {
+        if (!(stringa.charAt(i) === " ")) {
+            stringaResult += stringa.charAt(i);
+        }
+    }
+    return stringaResult;
+}
+
 export const createForm = (parentElement) => {
     let callback = null;
 
@@ -95,32 +105,38 @@ export const createForm = (parentElement) => {
 
 const fetch = generateFetchComponent();
 fetch.getData().then((s) => {
-    let lastResult = s;
+    let lastResult = JSON.parse(s);
     console.log(lastResult);
-    for(const key in lastResult) {
+    if (lastResult)
+        addToTable(lastResult)
+    /*for(const key in lastResult) {
         addToTable(lastResult[key]);
-    }
+    }*/
 }).catch(console.error)
 const form = createForm(document.querySelector("#modalDiv"));
 const mapContainer = document.getElementById("map");
 const map = createMap(mapContainer);
 console.log(map)
 map.build();
+
+
+
 form.onsubmit((incidente) => {
     map.addMarkerByAddress(incidente);
-    fetch.setData().then((r) => {
+    fetch.getData().then((r) => {
         let result = JSON.parse(r);
-        if(!result[incidente[incidente[key]]]) incidente[key] = incidente;
+        if (!result[incidente[eliminaspazi(incidente.indirizzo + "-" + incidente.dataOra)]]) result[eliminaspazi(incidente.indirizzo + "-" + incidente.dataOra)] = incidente;
         else console.log("presente")
-        fetch.setData(incidente).then(() => {
+        fetch.setData(result).then(() => {
             fetch.getData().then((s) => {
                 let lastResult = JSON.parse(s);
-                for(const key in lastResult) {
-                    addToTable(lastResult[key]);
-                };
+                addToTable(lastResult)
             }).catch(console.error)
         }).catch(console.error)
     }).catch(console.error)
     console.log("Incidente salvato:", incidente);
 });
+
+
+
 form.render();

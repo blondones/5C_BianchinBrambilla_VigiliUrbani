@@ -25,7 +25,7 @@ export const createMap = (parentElement) => {
 
                         const popupContent = "<b>Indirizzo:</b> " + incidente.indirizzo + "<br>" +
                             "<b>Data e Ora:</b> " + incidente.dataOra + "<br>" +
-                            "<b>Targhe:</b> " + (incidente.targhe.length > 0 ? incidente.targhe.join("; ") : "Nessuna") + "<br>" +
+                            "<b>Targhe:</b> " + (incidente.targhe.length > 0 ? incidente.targhe : "Nessuna") + "<br>" +
                             "<b>Morti:</b> " + incidente.morti + "<br>" +
                             "<b>Feriti:</b> " + incidente.feriti;
 
@@ -61,9 +61,7 @@ export function addToTable(incidente) {
                     '<tr>' +
                         '<th>Indirizzo</th>' +
                         '<th>Data e Ora</th>' +
-                        '<th>Targa 1</th>' +
-                        '<th>Targa 2</th>' +
-                        '<th>Targa 3</th>' +
+                        '<th>Targhe</th>' +
                         '<th>Morti</th>' +
                         '<th>Feriti</th>' +
                     '</tr>' +
@@ -75,17 +73,18 @@ export function addToTable(incidente) {
     }
 
     const tableBody = document.getElementById("tableBody");
-
-    const rowHTML = 
+    let rowHTML="";
+    for(const key in incidente){
+     rowHTML += 
         '<tr>' +
-            '<td>' + incidente.indirizzo + '</td>' +
-            '<td>' + incidente.dataOra + '</td>' +
-            '<td>' + (incidente.targhe) + '</td>' +
-            '<td>' + incidente.morti + '</td>' +
-            '<td>' + incidente.feriti + '</td>' +
+            '<td>' + incidente[key].indirizzo + '</td>' +
+            '<td>' + incidente[key].dataOra + '</td>' +
+            '<td>' + (incidente[key].targhe) + '</td>' +
+            '<td>' + incidente[key].morti + '</td>' +
+            '<td>' + incidente[key].feriti + '</td>' +
         '</tr>';
-
-    tableBody.innerHTML += rowHTML;
+    }
+    tableBody.innerHTML = rowHTML;
 }
 
 function clearTable() {

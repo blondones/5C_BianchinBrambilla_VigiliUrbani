@@ -32,7 +32,7 @@ export function generateFetchComponent() {
                         })
                     })
                     .then(r => r.json())
-                    .then(data => resolve(data))
+                    .then(data => resolve(data.result))
                     .catch(err => reject(err.result));
             })
         }
