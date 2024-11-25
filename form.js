@@ -2,6 +2,76 @@ import { generateFetchComponent } from "./fetch.js";
 import { addToTable } from "./maps.js";
 import { createMap } from "./maps.js";
 
+const createLogin = () => {
+    const myToken = "2891583b-c4cc-4903-818f-75b825c26f70"; 
+    let isLogged = sessionStorage.getItem("Logged") === "true" ? true : false; 
+    const renderLogin = () => {
+        document.body.innerHTML = `
+            <div id="login-container">
+                <div class="login-box">
+                    <h2>Login</h2>
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nome</label>
+                            <input type="text" id="name" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" id="password" class="form-control" required>
+                        </div>
+                        <button type="button" id="loginButton" class="btn btn-primary">Login</button>
+                    </form>
+                    <div id="loginMessage" class="mt-3 text-danger d-none">
+                        Credenziali non valide
+                    </div>
+                </div>
+            </div>
+        `;
+    };
+
+    if (!isLogged) {
+        const privateDiv = document.querySelector("#private");
+        if (privateDiv) {
+            privateDiv.classList.add("hidden");
+        }
+
+        renderLogin();
+
+        const loginButton = document.querySelector("#loginButton");
+        const loginMessage = document.querySelector("#loginMessage");
+
+        loginButton.onclick = () => {
+            const name = document.querySelector("#name").value;
+            const password = document.querySelector("#password").value;
+
+            if (name === "utente" && password === "password") {
+                sessionStorage.setItem("Logged", "true");
+                isLogged = true;
+
+                document.querySelector("#login-container").innerHTML = "";
+                if (privateDiv) {
+                    privateDiv.classList.add("visible");
+                    privateDiv.classList.remove("hidden");
+                }
+            } else {
+                loginMessage.classList.remove("d-none");
+            }
+        };
+    } else {
+        const privateDiv = document.querySelector("#private");
+        if (privateDiv) {
+            privateDiv.classList.add("visible");
+            privateDiv.classList.remove("hidden");
+        }
+    }
+
+    return {
+        isLogged: () => isLogged,
+    };
+};
+
+createLogin();
+
 function eliminaspazi(stringa) {
     let stringaResult = "";
     for (let i = 0; i < stringa.length; i++) {
@@ -43,7 +113,7 @@ export const createForm = (parentElement) => {
                                     <input type="datetime-local" id="dataOra" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="targa1" class="form-label">Targa 1</label>
+                                    <label for="targa1" class="form-label">Targhe</label>
                                     <input type="text" id="targa" class="form-control">
                                 </div>
                                 <div class="mb-3">
@@ -55,7 +125,7 @@ export const createForm = (parentElement) => {
                                     <input type="number" id="inputFeriti" class="form-control">
                                 </div>
                             </form>
-                            <div id="message" class="mt-3 text-danger d-none"> <!-- Messaggio di errore -->
+                            <div id="message" class="mt-3 text-danger d-none"> 
                                 Compila tutti i campi obbligatori!
                             </div>
                         </div>
