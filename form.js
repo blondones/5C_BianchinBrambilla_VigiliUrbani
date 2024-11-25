@@ -17,7 +17,6 @@ document.getElementById("register-button").onclick = () => {
     <div class="form-group">
       <label for="usernameInput">Username</label>
       <input type="text" class="form-control" id="usernameInput" aria-describedby="usernameHelp" placeholder="Enter username">
-      <small id="usernameHelp" class="form-text text-muted">We'll never share your username with anyone else.</small>
     </div>
     <div class="form-group">
       <label for="passwordInput">Password</label>
