@@ -120,7 +120,7 @@ export const createForm = (parentElement) => {
         render: () => {
             parentElement.innerHTML = `
             <div class="ap">
-                <button type="button" class="button btn btn-primary" data-bs-toggle="modal" data-bs-target="#incidentModal">
+                <button type="button" id = "bsi" class="button btn btn-primary" data-bs-toggle="modal" data-bs-target="#incidentModal">
                   Segnala Incidente
                 </button>
             </div>
