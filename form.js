@@ -2,6 +2,106 @@ import { generateFetchComponent } from "./fetch.js";
 import { addToTable } from "./maps.js";
 import { createMap } from "./maps.js";
 
+let isLogged = sessionStorage.getItem("login");
+if(isLogged === "true"){
+    document.getElementById("insert-incident").classList.toggle("hidden");
+    document.getElementById("register-button").classList.add("hidden")
+    document.getElementById("login-button").classList.add("hidden")
+}
+else{
+    console.log("Non loggato")
+}
+
+document.getElementById("register-button").onclick = () => {
+    document.getElementById("credential").innerHTML = `<form>
+    <div class="form-group">
+      <label for="usernameInput">Username</label>
+      <input type="text" class="form-control" id="usernameInput" aria-describedby="usernameHelp" placeholder="Enter username">
+      <small id="usernameHelp" class="form-text text-muted">We'll never share your username with anyone else.</small>
+    </div>
+    <div class="form-group">
+      <label for="passwordInput">Password</label>
+      <input type="password" class="form-control" id="passwordInput" placeholder="Password">
+    </div>
+    <button id="credentialRegister" type="button" class="btn btn-success">Submit</button>
+  </form>
+  `
+
+  document.getElementById("credentialRegister").onclick = () => {
+    console.log("Provando a registrarsi");
+    fetch("https://ws.cipiaceinfo.it/credential/register", {
+        method: "POST",
+        headers: {
+            "content-type": "application/json",
+            "key": "2891583b-c4cc-4903-818f-75b825c26f70"
+        },
+        body: JSON.stringify( {
+            username: document.getElementById("usernameInput").value,
+            password: document.getElementById("passwordInput").value
+        })
+    }).then(r => r.json()).then(()=>{
+        const username = document.getElementById("usernameInput").value;
+        const password = document.getElementById("passwordInput").value;
+
+        document.getElementById("usernameInput").value="";
+        document.getElementById("passwordInput").value ="";
+
+        sessionStorage.setItem("login", "true");
+
+        document.getElementById("insert-incident").classList.toggle("hidden");
+        document.getElementById("credential").classList.add("hidden")
+        document.getElementById("register-button").classList.add("hidden")
+        document.getElementById("login-button").classList.add("hidden")
+
+    }).catch(console.error);
+  }
+}
+
+
+document.getElementById("login-button").onclick = () => {
+    document.getElementById("credential").innerHTML = `<form>
+    <div class="form-group">
+      <label for="usernameInput">Username</label>
+      <input type="text" class="form-control" id="usernameInput" aria-describedby="usernameHelp" placeholder="Enter username">
+    </div>
+    <div class="form-group">
+      <label for="passwordInput">Password</label>
+      <input type="password" class="form-control" id="passwordInput" placeholder="Password">
+    </div>
+    <button id="credentialLogin" type="button" class="btn btn-success">Submit</button>
+  </form>
+  `
+
+  document.getElementById("credentialLogin").onclick = () => {
+    console.log("Provando a loggarsi")
+    fetch("https://ws.cipiaceinfo.it/credential/login", {
+        method: "POST",
+        headers: {
+            "content-type": "application/json",
+            "key": "2891583b-c4cc-4903-818f-75b825c26f70"
+        },
+        body:JSON.stringify( {
+            username: document.getElementById("usernameInput").value,
+            password: document.getElementById("passwordInput").value
+        })
+    }).then(r => r.json()).then(()=>{
+        const username = document.getElementById("usernameInput").value;
+        const password = document.getElementById("passwordInput").value;
+
+        document.getElementById("usernameInput").value="";
+        document.getElementById("passwordInput").value ="";
+
+        sessionStorage.setItem("login", "true");
+
+        document.getElementById("insert-incident").classList.toggle("hidden");
+        document.getElementById("credential").classList.add("hidden")
+        document.getElementById("register-button").classList.add("hidden")
+        document.getElementById("login-button").classList.add("hidden")
+
+    }).catch(console.error);
+  }
+}
+
 function eliminaspazi(stringa) {
     let stringaResult = "";
     for (let i = 0; i < stringa.length; i++) {
@@ -103,8 +203,8 @@ export const createForm = (parentElement) => {
     };
 };
 
-const fetch = generateFetchComponent();
-fetch.getData().then((s) => {
+const fetchComponent = generateFetchComponent();
+fetchComponent.getData().then((s) => {
     let lastResult = JSON.parse(s);
     console.log(lastResult);
     if (lastResult)
@@ -123,12 +223,12 @@ map.build();
 
 form.onsubmit((incidente) => {
     map.addMarkerByAddress(incidente);
-    fetch.getData().then((r) => {
+    fetchComponent.getData().then((r) => {
         let result = JSON.parse(r);
         if (!result[incidente[eliminaspazi(incidente.indirizzo + "-" + incidente.dataOra)]]) result[eliminaspazi(incidente.indirizzo + "-" + incidente.dataOra)] = incidente;
         else console.log("presente")
-        fetch.setData(result).then(() => {
-            fetch.getData().then((s) => {
+        fetchComponent.setData(result).then(() => {
+            fetchComponent.getData().then((s) => {
                 let lastResult = JSON.parse(s);
                 addToTable(lastResult)
             }).catch(console.error)

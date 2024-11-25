@@ -14,8 +14,30 @@
   </head>
   <body>
 
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Progetto Vigili Urbani</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <button class="nav-link" id="register-button">Register</button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" id="login-button">Login</button>
+          </li>
+          <li class="nav-item dropdown">
+            <button class="nav-link hidden" id="insert-incident">Inserisci <span class="sr-only">(only logged)</span></button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
     <h1>Vigili Urbani</h1>
 
+    <div id="credential"></div>
     <div id="buttonsDiv"></div>
     <div id="tableDiv"></div>
     <div id="modalDiv"></div>
