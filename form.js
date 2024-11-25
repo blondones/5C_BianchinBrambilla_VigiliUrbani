@@ -2,105 +2,6 @@ import { generateFetchComponent } from "./fetch.js";
 import { addToTable } from "./maps.js";
 import { createMap } from "./maps.js";
 
-let isLogged = sessionStorage.getItem("login");
-if(isLogged === "true"){
-    document.getElementById("insert-incident").classList.toggle("hidden");
-    document.getElementById("register-button").classList.add("hidden")
-    document.getElementById("login-button").classList.add("hidden")
-}
-else{
-    console.log("Non loggato")
-}
-
-document.getElementById("register-button").onclick = () => {
-    document.getElementById("credential").innerHTML = `<form>
-    <div class="form-group">
-      <label for="usernameInput">Username</label>
-      <input type="text" class="form-control" id="usernameInput" aria-describedby="usernameHelp" placeholder="Enter username">
-    </div>
-    <div class="form-group">
-      <label for="passwordInput">Password</label>
-      <input type="password" class="form-control" id="passwordInput" placeholder="Password">
-    </div>
-    <button id="credentialRegister" type="button" class="btn btn-success">Submit</button>
-  </form>
-  `
-
-  document.getElementById("credentialRegister").onclick = () => {
-    console.log("Provando a registrarsi");
-    fetch("https://ws.cipiaceinfo.it/credential/register", {
-        method: "POST",
-        headers: {
-            "content-type": "application/json",
-            "key": "2891583b-c4cc-4903-818f-75b825c26f70"
-        },
-        body: JSON.stringify( {
-            username: document.getElementById("usernameInput").value,
-            password: document.getElementById("passwordInput").value
-        })
-    }).then(r => r.json()).then(()=>{
-        const username = document.getElementById("usernameInput").value;
-        const password = document.getElementById("passwordInput").value;
-
-        document.getElementById("usernameInput").value="";
-        document.getElementById("passwordInput").value ="";
-
-        sessionStorage.setItem("login", "true");
-
-        document.getElementById("insert-incident").classList.toggle("hidden");
-        document.getElementById("credential").classList.add("hidden")
-        document.getElementById("register-button").classList.add("hidden")
-        document.getElementById("login-button").classList.add("hidden")
-
-    }).catch(console.error);
-  }
-}
-
-
-document.getElementById("login-button").onclick = () => {
-    document.getElementById("credential").innerHTML = `<form>
-    <div class="form-group">
-      <label for="usernameInput">Username</label>
-      <input type="text" class="form-control" id="usernameInput" aria-describedby="usernameHelp" placeholder="Enter username">
-    </div>
-    <div class="form-group">
-      <label for="passwordInput">Password</label>
-      <input type="password" class="form-control" id="passwordInput" placeholder="Password">
-    </div>
-    <button id="credentialLogin" type="button" class="btn btn-success">Submit</button>
-  </form>
-  `
-
-  document.getElementById("credentialLogin").onclick = () => {
-    console.log("Provando a loggarsi")
-    fetch("https://ws.cipiaceinfo.it/credential/login", {
-        method: "POST",
-        headers: {
-            "content-type": "application/json",
-            "key": "2891583b-c4cc-4903-818f-75b825c26f70"
-        },
-        body:JSON.stringify( {
-            username: document.getElementById("usernameInput").value,
-            password: document.getElementById("passwordInput").value
-        })
-    }).then(r => r.json()).then(()=>{
-        const username = document.getElementById("usernameInput").value;
-        const password = document.getElementById("passwordInput").value;
-
-        document.getElementById("usernameInput").value="";
-        document.getElementById("passwordInput").value ="";
-
-        sessionStorage.setItem("login", "true");
-
-        document.getElementById("insert-incident").classList.toggle("hidden");
-        document.getElementById("credential").classList.add("hidden")
-        document.getElementById("register-button").classList.add("hidden")
-        document.getElementById("login-button").classList.add("hidden")
-
-    }).catch(console.error);
-  }
-}
-
 function eliminaspazi(stringa) {
     let stringaResult = "";
     for (let i = 0; i < stringa.length; i++) {
@@ -142,7 +43,7 @@ export const createForm = (parentElement) => {
                                     <input type="datetime-local" id="dataOra" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="targa1" class="form-label">Targa 1</label>
+                                    <label for="targa1" class="form-label">Targhe</label>
                                     <input type="text" id="targa" class="form-control">
                                 </div>
                                 <div class="mb-3">
@@ -154,7 +55,7 @@ export const createForm = (parentElement) => {
                                     <input type="number" id="inputFeriti" class="form-control">
                                 </div>
                             </form>
-                            <div id="message" class="mt-3 text-danger d-none"> <!-- Messaggio di errore -->
+                            <div id="message" class="mt-3 text-danger d-none"> 
                                 Compila tutti i campi obbligatori!
                             </div>
                         </div>
