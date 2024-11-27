@@ -4,7 +4,6 @@ import { createMap } from "./maps.js";
 
 let isLogged = sessionStorage.getItem("login");
 if(isLogged === "true"){
-    document.getElementById("insert-incident").classList.toggle("hidden");
     document.getElementById("register-button").classList.add("hidden")
     document.getElementById("login-button").classList.add("hidden")
 }
@@ -120,7 +119,7 @@ export const createForm = (parentElement) => {
         render: () => {
             parentElement.innerHTML = `
             <div class="ap">
-                <button type="button" class="button btn btn-primary" data-bs-toggle="modal" data-bs-target="#incidentModal">
+                <button type="button" id="insert-incident" class="hidden button btn btn-primary" data-bs-toggle="modal" data-bs-target="#incidentModal">
                   Segnala Incidente
                 </button>
             </div>
@@ -142,7 +141,7 @@ export const createForm = (parentElement) => {
                                     <input type="datetime-local" id="dataOra" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="targa1" class="form-label">Targa 1</label>
+                                    <label for="targa1" class="form-label">Targhe</label>
                                     <input type="text" id="targa" class="form-control">
                                 </div>
                                 <div class="mb-3">
@@ -166,6 +165,8 @@ export const createForm = (parentElement) => {
                 </div>
             </div>
             `;
+
+            if(isLogged) document.getElementById("insert-incident").classList.toggle("hidden");
 
             const messageElement = document.querySelector("#message");
 
